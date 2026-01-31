@@ -1,6 +1,23 @@
 import streamlit as st
 import google.generativeai as genai
 
+# Setup API
+api_key = st.secrets["GOOGLE_API_KEY"]
+genai.configure(api_key=api_key)
+
+# --- NEW SELF-HEALING MODEL PICKER ---
+try:
+    # Try to use the standard 1.5 Flash first
+    model = genai.GenerativeModel('models/gemini-1.5-flash')
+    # Test it with a tiny call to make sure it exists
+    model.generate_content("ping") 
+except Exception:
+    # If that fails, it finds the first model your key IS allowed to use
+    available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+    model = genai.GenerativeModel(available_models[0])
+    st.sidebar.info(f"Using model: {available_models[0]}")
+
+
 # --- CONFIGURATION ---
 # In Streamlit Cloud, you set this in 'Secrets'
 api_key = st.secrets["GOOGLE_API_KEY"] 

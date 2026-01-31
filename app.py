@@ -8,7 +8,7 @@ genai.configure(api_key=api_key)
 # --- NEW SELF-HEALING MODEL PICKER ---
 try:
     # Try to use the standard 1.5 Flash first
-    model = genai.GenerativeModel('models/gemini-1.5-flash')
+    model = genai.GenerativeModel('models/gemini-2.5-flash')
     # Test it with a tiny call to make sure it exists
     model.generate_content("ping") 
 except Exception:
